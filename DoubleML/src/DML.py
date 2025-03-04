@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.base import clone
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LassoCV
+from sklearn.linear_model import LassoCV, LinearRegression
 
 np.random.seed(3141)
 
@@ -46,7 +46,8 @@ for metabolite in tqdm(metabolite_names):
                                       d_cols=treatment,
                                       x_cols=list(cols))
 
-        learner = RandomForestRegressor(n_estimators = 100, max_features = 'sqrt', max_depth= 4)
+        # learner = RandomForestRegressor(n_estimators = 100, max_features = 'sqrt', max_depth= 4)
+        learner = LinearRegression()    # trying Linear Regression to see if it speeds up calculation
         ml_l_bonus = clone(learner)
         ml_m_bonus = clone(learner)
 
@@ -63,8 +64,9 @@ for metabolite in tqdm(metabolite_names):
 
         coefficient_matrix.at[outcome, treatment] = float(coefficient)
         pvalues.at[outcome, treatment] = float(pvalue)
-    break
+    # break # was here to terminate after calculations for first metabolite (for testing)
 #%%
+coefficient_matrix.to_csv("./data/coefficient_matrix(1).tsv", sep='\t', index=True)
 
 plt.matshow(coefficient_matrix, cmap='bwr')
 plt.savefig("./figures/coefficient_matrix.png")
