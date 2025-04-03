@@ -71,6 +71,19 @@ scancel <jobid>
 ```
 
 Information about running jobs:
+
 ```
 sstat -a -j 12345 -o JobID,MinCPU,AveCPU
 ```
+
+Information about completed jobs:
+
+```
+sacct -o JobID,JobName,AllocCPUS,State,ExitCode,AveCPU,CPUTime,Elapsed,MaxRSS,TotalCPU,Start
+```
+
+### Information about the cluster
+```
+sinfo
+```
+
