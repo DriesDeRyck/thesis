@@ -7,8 +7,9 @@ from doubleml import DoubleMLData, DoubleMLPLR
 import matplotlib.pyplot as plt
 # from tqdm import tqdm
 from sklearn.base import clone
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import LassoCV, LinearRegression
+from xgboost import XGBRegressor
 from time import time
 
 from joblib import Parallel, delayed
@@ -60,8 +61,9 @@ def single_dml_calculation(microbe, metabolite, seed=3141):
                             d_cols=treatment,
                             x_cols=list(cols))
 
-    learner = RandomForestRegressor(n_estimators=100, max_features='sqrt', max_depth=5)
+    # learner = RandomForestRegressor(n_estimators=100, max_features='sqrt', max_depth=5)
     # learner = LinearRegression()  # trying Linear Regression to see if it speeds up calculation
+    learner = GradientBoostingRegressor()
     ml_l_bonus = clone(learner)
     ml_m_bonus = clone(learner)
 

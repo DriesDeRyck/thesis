@@ -41,3 +41,6 @@ def drop_sparse_columns(df: pd.DataFrame, threshold: float):
     zero_ratios = (df == 0).sum(axis=0) / nr_rows
     df = df.loc[:, (zero_ratios <= threshold)]           # keep columns where zero_ratio is below threshold
     return df
+
+def clr(microbes: pd.DataFrame, metabolites: pd.DataFrame):
+    pass

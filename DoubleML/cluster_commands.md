@@ -87,3 +87,8 @@ sacct -o JobID,JobName,AllocCPUS,State,ExitCode,AveCPU,CPUTime,Elapsed,MaxRSS,To
 sinfo
 ```
 
+### Information about the compute node
+- `htop` → core & memory usage
+- `sar` → system performance metrics like CPU / memory / disk usage over time
+- `vmstat` → monitors system memory / processes / CPU activity / I/O statistics in real-time
+- `pstree` → display a tree view of the running processes

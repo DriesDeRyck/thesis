@@ -55,6 +55,9 @@ def plot_single_correlation(treatment_data, outcome_data, treatment_name, outcom
     ax1.plot(treatment_data, color=color)
     ax1.tick_params(axis='y', labelcolor=color)
 
+    # Rotate x-axis labels vertically
+    # ax1.tick_params(axis='x', labelrotation=90)
+
     ax2 = ax1.twinx()  # instantiate a second Axes that shares the same x-axis
 
     color = 'tab:blue'
