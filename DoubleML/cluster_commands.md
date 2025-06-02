@@ -31,6 +31,22 @@ To unload all modules:
 module purge
 ```
 
+## Virtual Environment
+Launch an interactive job in the same partition you used when creating the virtual environment (or add the sbatch --partition option to your job script):
+
+```
+srun --partition=zen4 --pty bash -l
+```
+
+Load the same software modules that you used in the creation of the virtual environment:
+```
+module load Python/3.11.3-GCCcore-12.3.0 SciPy-bundle/2023.07-gfbf-2023a
+```
+Reactivate the virtual environment:
+```
+venv-zen4/bin/activate
+```
+
 ## Globus
 
 In the GlobusConnectPersonal directory, open globus installation folder, then:

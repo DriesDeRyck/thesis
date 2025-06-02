@@ -42,5 +42,9 @@ def drop_sparse_columns(df: pd.DataFrame, threshold: float):
     df = df.loc[:, (zero_ratios <= threshold)]           # keep columns where zero_ratio is below threshold
     return df
 
-def clr(microbes: pd.DataFrame, metabolites: pd.DataFrame):
-    pass
+def clr(dataframe: pd.DataFrame):
+    """
+    :param dataframe: a pandas dataframe containing compositional data with each column representing a different sample
+    :return: clr transformed dataframe
+    """
+    return np.log(dataframe) - np.log(dataframe).mean(axis=0)
