@@ -45,3 +45,10 @@ max_features = sqrt
 [boost]
 n_iter_no_change = 10
 ```
+
+## Evaluation
+Evaluating the ranks and creating the visualization is done in the 
+`evaluate-biocrust.ipynb` and `evaluate-sim.ipynb` files in the respective 
+subdirectories `soil/`and `sim/`.
+
+The resulting figures can be found in the so named folder.

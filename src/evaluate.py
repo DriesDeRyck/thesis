@@ -207,7 +207,7 @@ def _edge_roc_curve(ranks, edges, k_max=10, axis=1):
     # the lowest coefficient
     sranks = pd.DataFrame(
         list(ranks.apply(
-            lambda x: list(ranks.columns[np.argsort(x)]), axis=1)
+            lambda x: list(ranks.columns[np.argsort(x)]), axis=1) # mergesort for same behaviour as originally
         )
     )
     sranks.index = ranks.index

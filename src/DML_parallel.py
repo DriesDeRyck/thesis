@@ -33,8 +33,8 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner):
     sensitivity_test = pd.DataFrame(columns=microbe_names, index=metabolite_names)
 
     def single_dml_calculation(microbe, metabolite, seed=seed):
-        print(np.random.seed)
         np.random.seed(seed)
+        # print(np.random.rand())
         outcome = metabolite
         joined_data = pd.concat([metabolites_T[outcome], microbes_T], axis=1)
 
@@ -85,8 +85,8 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner):
 
     # print("{:.3f}".format(time() - end))
 
-    coefficient_matrix.to_csv(os.path.join(results_dir, "coefficient_matrix_parallel.tsv"), sep='\t', index=True)
-    pvalues.to_csv(os.path.join(results_dir, "pvalues_matrix.tsv"), sep='\t', index=True)
+    coefficient_matrix.to_csv(os.path.join(results_dir, "coefficients.tsv"), sep='\t', index=True)
+    pvalues.to_csv(os.path.join(results_dir, "pvalues.tsv"), sep='\t', index=True)
     sensitivity_test.to_csv(os.path.join(results_dir, "sensitivity_test.tsv"), sep='\t', index=True)
 
 
