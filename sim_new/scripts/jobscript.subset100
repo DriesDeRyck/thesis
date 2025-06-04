@@ -7,7 +7,7 @@
 #SBATCH -A ap_adrem_wb_thesis2425
 #SBATCH -o ./out/out.%x.%j -e ./err/err.%x.%j
 #SBATCH --mail-type=ALL
-#SBATCH --job-name=sim_new.benchmark
+#SBATCH --job-name=sim_new.benchmark.subset100
 
 export PYTHONPATH="${VSC_DATA}/doubleml/lib/python3.12/site-packages/:${PYTHONPATH}"
 
@@ -19,9 +19,9 @@ module load scikit-learn/1.5.2-gfbf-2024a
 
 source ../../venv-zen2/bin/activate
 
-microbe_file="../data/microbes.tsv"
-metabolite_file="../data/metabolites.tsv"
-results_dir="../results/"
-settings_file="../../settings/settings.default.ini"
+microbe_file="../data/microbes.subset100.tsv"
+metabolite_file="../data/metabolites.subset100.tsv"
+results_dir="../results/subset100"
+settings_file="../../settings/settings.rf.ini"
 
 srun python ../../src/DML_parallel.py $microbe_file $metabolite_file $results_dir $settings_file

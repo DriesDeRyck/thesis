@@ -3,7 +3,7 @@
 #SBATCH --partition=zen2
 #SBATCH --ntasks=1 --cpus-per-task=64 
 #SBATCH --mem-per-cpu=1g 
-#SBATCH --time=72:00:00
+#SBATCH --time=24:00:00 
 #SBATCH -A ap_adrem_wb_thesis2425
 #SBATCH -o ./out/out.%x.%j -e ./err/err.%x.%j
 #SBATCH --mail-type=ALL
@@ -21,7 +21,7 @@ source ../../venv-zen2/bin/activate
 
 microbe_file="../data/microbes.tsv"
 metabolite_file="../data/metabolites.tsv"
-results_dir="../results/"
+results_dir="../results/original_data"
 settings_file="../../settings/settings.default.ini"
 
 srun python ../../src/DML_parallel.py $microbe_file $metabolite_file $results_dir $settings_file

@@ -36,6 +36,10 @@ The resulting files are:
 - `clr_metabolites_min.tsv`
 - `clr_metabolites_sc.tsv`
 - `clr_metabolites_sc_min.tsv`
+- `clr_sep_microbes.tsv`
+- `clr_sep_metabolites.tsv`
+- `clr_sep_microbes_min.tsv`
+- `clr_sep_metabolites_min.tsv`
 
 ### Subset files
 Creating the subsets of the relative simulation data is done in the 

@@ -18,7 +18,7 @@ from configparser import ConfigParser
 from joblib import Parallel, delayed
 
 
-def run_dml(microbe_file, metabolite_file, results_dir, learner):
+def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
     # read dataframes from files
     microbes_T = pd.read_csv(microbe_file, sep='\t', index_col=0).T
     metabolites_T = pd.read_csv(metabolite_file, sep='\t', index_col=0).T
@@ -32,7 +32,7 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner):
     pvalues = pd.DataFrame(columns=microbe_names, index=metabolite_names, dtype=float)
     sensitivity_test = pd.DataFrame(columns=microbe_names, index=metabolite_names)
 
-    def single_dml_calculation(microbe, metabolite, seed=seed):
+    def single_dml_calculation(microbe, metabolite, seed=4131):
         np.random.seed(seed)
         # print(np.random.rand())
         outcome = metabolite
@@ -70,7 +70,7 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner):
         return [coefficient, pvalue, microbe, metabolite, sensitivity_result]
 
     start = time()
-    output = Parallel(n_jobs=-1)(delayed(single_dml_calculation)(i, j) for j in metabolite_names for i in microbe_names)
+    output = Parallel(n_jobs=-1)(delayed(single_dml_calculation)(i, j, seed) for j in metabolite_names for i in microbe_names)
     end = time()
     print("Time to run DML: ","{:.4f}".format(end - start), " seconds")
     #
@@ -123,6 +123,8 @@ if __name__ == "__main__":
         print("Could not parse settings file\n", type(e), e)
         exit(1)
 
+    np.random.seed(seed)
+
     # try to construct learner with specified settings
     try:
         match learner_type:
@@ -148,9 +150,7 @@ if __name__ == "__main__":
     print(f"Running DML_parallel with seed {seed}, learner {learner_type}, and learner settings {learner_settings}\n")
     print(f"{type(learner)}: {learner.get_params()}\n")
 
-    np.random.seed(seed)
-
-    run_dml(microbe_file, metabolite_file, results_dir, learner)
+    run_dml(microbe_file, metabolite_file, results_dir, learner, seed)
 
     # save settings together with results in results dir
     with open(os.path.join(results_dir, 'settings.ini'), 'w') as configfile:

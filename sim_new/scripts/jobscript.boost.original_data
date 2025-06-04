@@ -7,7 +7,7 @@
 #SBATCH -A ap_adrem_wb_thesis2425
 #SBATCH -o ./out/out.%x.%j -e ./err/err.%x.%j
 #SBATCH --mail-type=ALL
-#SBATCH --job-name=sim_new.benchmark
+#SBATCH --job-name=sim_new.benchmark.boost.original_data
 
 export PYTHONPATH="${VSC_DATA}/doubleml/lib/python3.12/site-packages/:${PYTHONPATH}"
 
@@ -21,7 +21,7 @@ source ../../venv-zen2/bin/activate
 
 microbe_file="../data/microbes.tsv"
 metabolite_file="../data/metabolites.tsv"
-results_dir="../results/"
-settings_file="../../settings/settings.default.ini"
+results_dir="../results/boost_original_data"
+settings_file="../../settings/settings.boost.ini"
 
 srun python ../../src/DML_parallel.py $microbe_file $metabolite_file $results_dir $settings_file
