@@ -1,8 +1,8 @@
 # Master thesis
 ## How to use DML_parallel.py?
 Required arguments:
-- **microbes**:     path to microbe (.tsv) file (rows = microbes, colunms = samples)
-- **metabolites**:  path to metabolite (.tsv) file (rows = metabolites, colunms = samples)
+- **microbes**:     path to microbe (.tsv) file (rows = microbes, columns = samples)
+- **metabolites**:  path to metabolite (.tsv) file (rows = metabolites, columns = samples)
 - **results**:      path to results directory (must not exist)
 - **config**:       path to config (.ini) file
 
