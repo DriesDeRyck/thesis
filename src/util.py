@@ -75,7 +75,7 @@ def read_ini_file(config, file='settings.ini'):
             learner_settings[setting] = config[learner][setting]
             if learner_settings[setting].isdigit():
                 learner_settings[setting] = int(learner_settings[setting])
-            if isfloat(learner_settings[setting]):
+            elif isfloat(learner_settings[setting]):
                 learner_settings[setting] = float(learner_settings[setting])
 
     return seed, learner, learner_settings

@@ -2,6 +2,7 @@ import sys
 import os.path
 from pathlib import Path
 import warnings
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import numpy as np
 import pandas as pd
@@ -70,9 +71,10 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
         return [coefficient, pvalue, microbe, metabolite, sensitivity_result]
 
     start = time()
-    output = Parallel(n_jobs=-1)(delayed(single_dml_calculation)(i, j, seed) for j in metabolite_names for i in microbe_names)
+    output = Parallel(n_jobs=-1)(
+        delayed(single_dml_calculation)(i, j, seed) for j in metabolite_names for i in microbe_names)
     end = time()
-    print("Time to run DML: ","{:.4f}".format(end - start), " seconds")
+    print("Time to run DML: ", "{:.4f}".format(end - start), " seconds")
     #
     # coefficients_list = [pair[0] for pair in output]
     # pvalues_list = [pair[1] for pair in output]
@@ -93,8 +95,10 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
 if __name__ == "__main__":
     # parse arguments
     argparser = ArgumentParser("Run DML")
-    argparser.add_argument("microbes", type=str, help="path to microbe (.tsv) file (rows = microbes, colunms = samples)")
-    argparser.add_argument("metabolites", type=str, help="path to metabolite (.tsv) file (rows = metabolites, colunms = samples)")
+    argparser.add_argument("microbes", type=str,
+                           help="path to microbe (.tsv) file (rows = microbes, colunms = samples)")
+    argparser.add_argument("metabolites", type=str,
+                           help="path to metabolite (.tsv) file (rows = metabolites, colunms = samples)")
     argparser.add_argument("results", type=str, help="path to results directory (must not exist)")
     argparser.add_argument("config", type=str, help="path to config (.ini) file (see README for more info)")
     args = argparser.parse_args()
@@ -152,11 +156,11 @@ if __name__ == "__main__":
     print(f"Running DML_parallel with seed {seed}, learner {learner_type}, and learner settings {learner_settings}\n")
     print(f"{type(learner)}: {learner.get_params()}\n")
 
-    run_dml(microbe_file, metabolite_file, results_dir, learner, seed)
-
     # save settings together with results in results dir
     with open(os.path.join(results_dir, 'settings.ini'), 'w') as configfile:
         configfile.write(f"# Config file used with {microbe_file} and {metabolite_file}\n")
         config.write(configfile)
+
+    run_dml(microbe_file, metabolite_file, results_dir, learner, seed)
 
     exit(0)
