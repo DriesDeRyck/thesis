@@ -134,6 +134,8 @@ if __name__ == "__main__":
                 learner = RandomForestRegressor(**learner_settings)
             case 'boost':
                 learner = GradientBoostingRegressor(**learner_settings)
+            case 'xgboost':
+                learner = XGBRegressor(**learner_settings)
             case _:
                 raise Exception(f"Unknown learner type: {learner_type}")
     except Exception as e:

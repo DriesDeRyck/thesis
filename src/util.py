@@ -39,8 +39,17 @@ def drop_sparse_columns(df: pd.DataFrame, threshold: float):
     """
     nr_rows = df.shape[0]
     zero_ratios = (df == 0).sum(axis=0) / nr_rows
-    df = df.loc[:, (zero_ratios <= threshold)]           # keep columns where zero_ratio is below threshold
+    df = df.loc[:, (zero_ratios <= threshold)]  # keep columns where zero_ratio is below threshold
     return df
+
+
+def isfloat(str):
+    try:
+        float(str)
+        return True
+    except ValueError:
+        return False
+
 
 def clr(dataframe: pd.DataFrame):
     """
@@ -49,39 +58,24 @@ def clr(dataframe: pd.DataFrame):
     """
     return np.log(dataframe) - np.log(dataframe).mean(axis=0)
 
+
 def read_ini_file(config, file='settings.ini'):
     config.read(file)
 
     seed = int(config['general']['seed'])
     learner = config['general']['learner']
 
-    if learner not in ['rf', 'lr', 'boost']:
-        raise (ValueError("Learner must be 'lr', 'rf' or 'boost'"))
+    if learner not in ['rf', 'lr', 'boost', 'xgboost']:
+        raise (ValueError("Learner must be 'lr', 'rf', 'boost' or 'xgboost'"))
 
     learner_settings = {}
     # Check if custom values are specified
     if learner in config:
-        # match learner:
-        #     case 'rf':
-        #         if 'n_estimators' in config[learner]:
-        #             learner_settings['n_estimators'] = int(config[learner]['n_estimators'])
-        #         if 'max_depth' in config[learner]:
-        #             learner_settings['max_depth'] = int(config[learner]['max_depth'])
-        #         if 'max_features' in config[learner]:
-        #             learner_settings['max_features'] = config[learner]['max_features']
-        #             if learner_settings['n_estimators'].isdigit():
-        #                 learner_settings['n_estimators'] = int(learner_settings['n_estimators'])
-        #
-        #     case 'boost':
-        #         if 'n_iter_no_change' in config[learner]:
-        #             try: learner_settings['n_iter_no_change'] = int(config[learner]['n_iter_no_change'])
-        #             except: pass
-        #
-        #     case 'lr':
-        #         learner_settings = {}
         for setting in config[learner]:
             learner_settings[setting] = config[learner][setting]
             if learner_settings[setting].isdigit():
                 learner_settings[setting] = int(learner_settings[setting])
+            if isfloat(learner_settings[setting]):
+                learner_settings[setting] = float(learner_settings[setting])
 
     return seed, learner, learner_settings
