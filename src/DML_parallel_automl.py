@@ -17,6 +17,7 @@ from util import read_ini_file
 from argparse import ArgumentParser
 from configparser import ConfigParser
 from joblib import Parallel, delayed
+from flaml import AutoML
 
 
 def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
@@ -32,6 +33,7 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
     coefficient_matrix = pd.DataFrame(columns=microbe_names, index=metabolite_names, dtype=float)
     pvalues = pd.DataFrame(columns=microbe_names, index=metabolite_names, dtype=float)
     sensitivity_test = pd.DataFrame(columns=microbe_names, index=metabolite_names)
+    best_models = pd.DataFrame(columns=microbe_names, index=metabolite_names)
 
     def single_dml_calculation(microbe, metabolite, seed=4131):
         np.random.seed(seed)
@@ -50,8 +52,24 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
                                 d_cols=treatment,
                                 x_cols=list(cols))
 
-        ml_l_bonus = clone(learner)
-        ml_m_bonus = clone(learner)
+        ## AutoML
+        data = joined_data
+        # Initialize AutoML for outcome model (ml_l): Predict Y based on X
+        automl_l = AutoML()
+        settings_l = learner
+        automl_l.fit(X_train=data.drop(columns=[outcome, treatment]).values, y_train=data[outcome].values, verbose=2,
+                     **settings_l)
+
+        # Initialize AutoML for treatment model (ml_m): Predict D based on X
+        automl_m = AutoML()
+        settings_m = learner
+        automl_m.fit(X_train=data.drop(columns=[outcome, treatment]).values, y_train=data[treatment].values, verbose=2,
+                     **settings_m)
+
+        ml_l_bonus = automl_l.model.estimator
+        ml_m_bonus = automl_m.model.estimator
+        ml_l_best_config = automl_l.best_config
+        ml_m_best_config = automl_m.best_config
 
         obj_dml_plr = DoubleMLPLR(dml_data, ml_l_bonus, ml_m_bonus)
         obj_dml_plr.fit()
@@ -68,7 +86,7 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
         # coefficient_matrix.at[outcome, treatment] = float(coefficient)
         # pvalues.at[outcome, treatment] = float(pvalue)
 
-        return [coefficient, pvalue, microbe, metabolite, sensitivity_result]
+        return [coefficient, pvalue, microbe, metabolite, sensitivity_result, [ml_l_best_config, ml_m_best_config]]
 
     start = time()
     output = Parallel(n_jobs=-1)(
@@ -84,12 +102,14 @@ def run_dml(microbe_file, metabolite_file, results_dir, learner, seed=4131):
         coefficient_matrix.at[result[3], result[2]] = float(result[0])
         pvalues.at[result[3], result[2]] = float(result[1])
         sensitivity_test.at[result[3], result[2]] = result[4]
+        best_models.at[result[3], result[2]] = result[5]
 
     # print("{:.3f}".format(time() - end))
 
     coefficient_matrix.to_csv(os.path.join(results_dir, "coefficients.tsv"), sep='\t', index=True)
     pvalues.to_csv(os.path.join(results_dir, "pvalues.tsv"), sep='\t', index=True)
     sensitivity_test.to_csv(os.path.join(results_dir, "sensitivity_test.tsv"), sep='\t', index=True)
+    best_models.to_csv(os.path.join(results_dir, "best_models.tsv"), sep='\t', index=True)
 
 
 if __name__ == "__main__":
@@ -129,23 +149,6 @@ if __name__ == "__main__":
 
     np.random.seed(seed)
 
-    # try to construct learner with specified settings
-    try:
-        match learner_type:
-            case 'lr':
-                learner = LinearRegression()
-            case 'rf':
-                learner = RandomForestRegressor(**learner_settings)
-            case 'boost':
-                learner = GradientBoostingRegressor(**learner_settings)
-            case 'xgboost':
-                learner = XGBRegressor(**learner_settings)
-            case _:
-                raise Exception(f"Unknown learner type: {learner_type}")
-    except Exception as e:
-        print(f"Could not construct learner with settings: {learner_settings}\n", type(e), e)
-        exit(1)
-
     # make sure results directory exists
     try:
         Path(results_dir).mkdir(parents=True, exist_ok=False)
@@ -153,14 +156,16 @@ if __name__ == "__main__":
         print(f"Could not create results directory\n", type(e), e)
         exit(1)
 
-    print(f"Running DML_parallel with seed {seed}, learner {learner_type}, and learner settings {learner_settings}\n")
-    print(f"{type(learner)}: {learner.get_params()}\n")
+    learner_settings['estimator_list'] = [learner_settings['estimator_list']]
+
+    print(f"Running DML_parallel_automl with seed {seed}, learner {learner_type}, and learner settings {learner_settings}\n")
+    # print(f"{type(learner)}: {learner.get_params()}\n")
 
     # save settings together with results in results dir
     with open(os.path.join(results_dir, 'settings.ini'), 'w') as configfile:
         configfile.write(f"# Config file used with {microbe_file} and {metabolite_file}\n")
         config.write(configfile)
 
-    run_dml(microbe_file, metabolite_file, results_dir, learner, seed)
+    run_dml(microbe_file, metabolite_file, results_dir, learner_settings, seed)
 
     exit(0)

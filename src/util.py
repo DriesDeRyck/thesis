@@ -59,14 +59,16 @@ def clr(dataframe: pd.DataFrame):
     return np.log(dataframe) - np.log(dataframe).mean(axis=0)
 
 
-def read_ini_file(config, file='settings.ini'):
+def read_ini_file(config, file='settings.ini', automl=False):
     config.read(file)
 
     seed = int(config['general']['seed'])
     learner = config['general']['learner']
 
-    if learner not in ['rf', 'lr', 'boost', 'xgboost']:
+    if (learner not in ['rf', 'lr', 'boost', 'xgboost']) and (automl is False):
         raise (ValueError("Learner must be 'lr', 'rf', 'boost' or 'xgboost'"))
+    elif learner != 'automl' and automl is True:
+        raise (ValueError("Learner must be 'automl'"))
 
     learner_settings = {}
     # Check if custom values are specified
