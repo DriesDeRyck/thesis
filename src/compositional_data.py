@@ -58,7 +58,7 @@ axs[1, 1].legend()
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
-plt.subplots_adjust(wspace=0.5)  # Increase from default (~0.2)
+plt.subplots_adjust(wspace=0.3)  # Increase from default (~0.2)
 
 plt.savefig("../figures/compositional_data.png")
 plt.show()

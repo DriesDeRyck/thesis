@@ -142,7 +142,7 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        seed, learner_type, learner_settings = read_ini_file(config, file=config_file)
+        seed, learner_type, learner_settings = read_ini_file(config, file=config_file, automl=True)
     except Exception as e:
         print("Could not parse settings file\n", type(e), e)
         exit(1)
