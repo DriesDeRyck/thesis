@@ -5,3 +5,11 @@
 /reply-quinn-erb/
 /DoubleML (copy).zip
 /sim/
+/sim_new/results/DML/automl_rf_short/best_models.tsv
+/sim_new/results/DML/automl_rf_short/sensitivity_test.tsv
+/sim_new/results/DML/automl_rf_short_clr_min/best_models.tsv
+/sim_new/results/DML/automl_rf_short_clr_min/sensitivity_test.tsv
+/sim_new/results/DML/automl_xgboost_short/best_models.tsv
+/sim_new/results/DML/automl_xgboost_short/sensitivity_test.tsv
+/sim_new/results/DML/automl_xgboost_short_clr_min/best_models.tsv
+/sim_new/results/DML/automl_xgboost_short_clr_min/sensitivity_test.tsv
