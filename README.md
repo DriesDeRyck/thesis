@@ -1,4 +1,27 @@
-# Master thesis
+# Master's Thesis: Double Machine Learning to Uncover Causal Microbe-Metabolite Relationships
+
+## Structure of this repository
+This repository is structured as follows:
+- `src`: this directory holds the python files containing the main functionality
+- `sim_new`: directory including notebooks and files related to the simulated dataset
+  - `data`: simulation data
+  - `figures`: figures related to the simulation data
+  - `results`: results of the models trained on the simulation data
+    - `CF_sims`: results of the methods tested by Morton et al.
+    - `DML`: results of the DML models
+  - `scripts`: scripts used to run the models on the VSC
+    - `out`: output of running the models
+  - Several notebooks used for preparing the simulation data and processing the results
+- `soil`: directory including notebooks and files related to the soil dataset
+  - `data`: soil data
+  - `figures`: figures related to the soil data
+  - `results`: results of the models trained on the soil data
+  - `scripts`: scripts used to run the models on the VSC
+    - `out`: output of running the models
+  - Several notebooks used for preparing the soil data and processing the results
+- `figures`: this directory contains additional figures that were created for the thesis.
+- `settings`: the settings files that were used to specify the model parameters
+
 ## How to use DML_parallel.py?
 Required arguments:
 - **microbes**:     path to microbe (.tsv) file (rows = microbes, columns = samples)
@@ -49,6 +72,4 @@ n_iter_no_change = 10
 ## Evaluation
 Evaluating the ranks and creating the visualization is done in the 
 `evaluate-biocrust.ipynb` and `evaluate-sim.ipynb` files in the respective 
-subdirectories `soil/`and `sim/`.
-
-The resulting figures can be found in the so named folder.
+subdirectories `soil/`and `sim_new/`.
