@@ -1,0 +1,3 @@
+Running DML_parallel_automl with seed 4131, learner automl, and learner settings {'estimator_list': ['xgboost'], 'time_budget': 5, 'metric': 'rmse', 'task': 'regression'}
+
+Time to run DML:  57157.3617  seconds

@@ -1,0 +1,5 @@
+Running DML_parallel with seed 4131, learner lr, and learner settings {}
+
+<class 'sklearn.linear_model._base.LinearRegression'>: {'copy_X': True, 'fit_intercept': True, 'n_jobs': None, 'positive': False}
+
+Time to run DML:  98.9166  seconds

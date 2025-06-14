@@ -1,0 +1,2 @@
+Could not create results directory
+ <class 'FileExistsError'> [Errno 17] File exists: '../results/automl_xgboost_long'

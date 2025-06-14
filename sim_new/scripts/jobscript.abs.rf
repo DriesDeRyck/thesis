@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH --partition=zen2
+#SBATCH --ntasks=1 --cpus-per-task=64 
+#SBATCH --mem-per-cpu=1g 
+#SBATCH --time=72:00:00
+#SBATCH -A ap_adrem_wb_thesis2425
+#SBATCH -o ./out/out.%x.%j -e ./err/err.%x.%j
+#SBATCH --mail-type=ALL
+#SBATCH --job-name=sim_new.benchmark.abs.rf
+
+export PYTHONPATH="${VSC_DATA}/doubleml/lib/python3.12/site-packages/:${PYTHONPATH}"
+
+module purge
+module load calcua/all
+module load Python/3.12.3-GCCcore-13.3.0
+module load SciPy-bundle/2024.05-gfbf-2024a
+module load scikit-learn/1.5.2-gfbf-2024a
+
+source ../../venv-zen2/bin/activate
+
+microbe_file="../data/abs_microbes.tsv"
+metabolite_file="../data/abs_metabolites.tsv"
+results_dir="../results/abs_rf"
+settings_file="../../settings/settings.rf.ini"
+
+srun python ../../src/DML_parallel.py $microbe_file $metabolite_file $results_dir $settings_file
